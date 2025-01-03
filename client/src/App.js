@@ -1,5 +1,7 @@
 import React from 'react';
 import ApiTest from './components/ApiTest';
+import SubscriptionManager from './components/SubscriptionManager';
+
 // import './App.css';
 
 function App() {
@@ -8,6 +10,7 @@ function App() {
       <header className="App-header">
         <h1>GolfLab</h1>
         <ApiTest />
+        <SubscriptionManager />
       </header>
     </div>
   );

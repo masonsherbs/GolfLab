@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const { Subscription } = require('./models');
 const { Sequelize } = require('sequelize');
 const config = require('./config/config.json')[process.env.NODE_ENV || 'development'];
 const db = require('./models');
@@ -27,6 +28,28 @@ app.get('/api/users', async (req, res) => {
     res.json(users);
   } catch (error) {
     res.status(500).json({ error: 'Error fetching users' });
+  }
+});
+
+// New route to create a subscription
+app.post('/api/subscriptions', async (req, res) => {
+  try {
+    const { number } = req.body;
+    const subscription = await Subscription.create({ number });
+    res.json(subscription);
+  } catch (error) {
+    res.status(500).json({ error: 'Error creating subscription' });
+  }
+});
+// New route to get the most recent subscription
+app.get('/api/subscriptions/latest', async (req, res) => {
+  try {
+    const subscription = await Subscription.findOne({
+      order: [['createdAt', 'DESC']]
+    });
+    res.json(subscription);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching latest subscription' });
   }
 });
 app.listen(port, () => {
