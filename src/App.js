@@ -1,10 +1,14 @@
 import React from 'react';
+import ApiTest from './components/ApiTest';
+// import './App.css';
 
 function App() {
   return (
-    <div>
-      <h1>Welcome to GolfLab</h1>
-      <p>Schedule your appointment today!</p>
+    <div className="App">
+      <header className="App-header">
+        <h1>GolfLab</h1>
+        <ApiTest />
+      </header>
     </div>
   );
 }

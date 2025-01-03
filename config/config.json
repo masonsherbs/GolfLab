@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "golflab",
+    "password": "golflab",
+    "database": "golflab",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "golflab",
+    "password": "golflab",
+    "database": "golflab_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "golflab",
+    "password": "golflab",
+    "database": "golflab_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
