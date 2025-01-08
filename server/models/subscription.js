@@ -1,23 +1,33 @@
 'use strict';
 const {
-    Model
+  Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class Subscription extends Model {
-        /**
-         * Helper method for defining associations.
-         * This method is not a part of Sequelize lifecycle.
-         * The `models/index` file will call this method automatically.
-         */
-        static associate(models) {
-            // define association here
-        }
+  const Subscription = sequelize.define('Subscription', {
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'id'
+      }
+    },
+    planType: {
+      type: DataTypes.ENUM('monthly', 'pay-per-use'),
+      allowNull: false
+    },
+    startDate: DataTypes.DATE,
+    endDate: DataTypes.DATE,
+    status: {
+      type: DataTypes.ENUM('active', 'inactive', 'cancelled'),
+      defaultValue: 'active'
     }
-    Subscription.init({
-        number: DataTypes.INTEGER
-    }, {
-        sequelize,
-        modelName: 'Subscription',
-    });
-    return Subscription;
+  });
+
+  Subscription.associate = function(models) {
+    Subscription.belongsTo(models.User);
+    Subscription.hasMany(models.Payment);
+  };
+
+  return Subscription;
 };

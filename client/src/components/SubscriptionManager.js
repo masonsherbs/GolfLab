@@ -2,48 +2,34 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 function SubscriptionManager() {
-  const [number, setNumber] = useState('');
-  const [latestSubscription, setLatestSubscription] = useState(null);
+  const [planType, setPlanType] = useState('monthly');
+  const [userId, setUserId] = useState('');
+  const [message, setMessage] = useState('');
 
   const handleCreateSubscription = async () => {
     try {
-      await axios.post('http://localhost:3001/api/subscriptions', { number: parseInt(number) });
-      setNumber('');
-      alert('Subscription created successfully!');
+      const response = await axios.post('http://localhost:3001/api/subscriptions', { planType, userId: parseInt(userId) });
+      setMessage(`Subscription created successfully! ID: ${response.data.id}`);
     } catch (error) {
-      console.error('Error creating subscription:', error);
-      alert('Failed to create subscription');
-    }
-  };
-
-  const handleGetLatestSubscription = async () => {
-    try {
-      const response = await axios.get('http://localhost:3001/api/subscriptions/latest');
-      setLatestSubscription(response.data);
-    } catch (error) {
-      console.error('Error fetching latest subscription:', error);
-      alert('Failed to fetch latest subscription');
+      setMessage(`Error creating subscription: ${error.response?.data?.error || error.message}`);
     }
   };
 
   return (
     <div>
       <h2>Subscription Manager</h2>
-      <div>
-        <input 
-          type="number" 
-          value={number} 
-          onChange={(e) => setNumber(e.target.value)} 
-          placeholder="Enter subscription number"
-        />
-        <button onClick={handleCreateSubscription}>Create Subscription</button>
-      </div>
-      <div>
-        <button onClick={handleGetLatestSubscription}>Get Latest Subscription</button>
-        {latestSubscription && (
-          <p>Latest Subscription Number: {latestSubscription.number}</p>
-        )}
-      </div>
+      <select value={planType} onChange={(e) => setPlanType(e.target.value)}>
+        <option value="monthly">Monthly</option>
+        <option value="pay-per-use">Pay Per Use</option>
+      </select>
+      <input 
+        type="number" 
+        value={userId} 
+        onChange={(e) => setUserId(e.target.value)} 
+        placeholder="User ID"
+      />
+      <button onClick={handleCreateSubscription}>Create Subscription</button>
+      {message && <p>{message}</p>}
     </div>
   );
 }
