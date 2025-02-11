@@ -20,7 +20,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     firstName: DataTypes.STRING(50),
     lastName: DataTypes.STRING(50),
-    phoneNumber: DataTypes.STRING(20)
+    phoneNumber: DataTypes.STRING(20),
+    accessLevel: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    }
   });
 
   User.associate = function(models) {
