@@ -13,14 +13,24 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     planType: {
-      type: DataTypes.ENUM('monthly', 'pay-per-use'),
+      type: DataTypes.ENUM('monthly', 'pay-per-use', 'trial', 'punch-card'),
       allowNull: false
     },
-    startDate: DataTypes.DATE,
-    endDate: DataTypes.DATE,
+    startDate: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    endDate: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
     status: {
       type: DataTypes.ENUM('active', 'inactive', 'cancelled'),
       defaultValue: 'active'
+    },
+    sessionsRemaining: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     }
   });
 
