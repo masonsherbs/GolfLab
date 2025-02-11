@@ -26,14 +26,10 @@ To start the development server and run the app on localhost:3000, follow these 
 1. Make sure you're in the project directory:
 cd /Users/masonsherburne/Documents/GitHub/GolfLab
 
-2. Start the React app dev server:
-npm start
+2. Start the app:
+npm run dev
 
-3. Run express Backend for API requests:
-npm run server
-
-
-4. Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
+3. Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
 
 The page will reload if you make edits. You will also see any lint errors in the console.
 
