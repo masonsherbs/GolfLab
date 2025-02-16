@@ -44,6 +44,30 @@ npm test
 2. Run specific test files:
 npm test -- server.test.js
 
+# DB Stuff
+To login to the root for mysql: 
+mysql -u root -p 
+(password is "root")
+
+For the golflab_user account:
+mysql -u golflab_user -p
+(password is password)
+
+The ./server/config/config.json file contains the credentials to run the migration and seed commands like so:
+npx sequelize-cli db:migrate
+npx sequelize-cli db:seed:all
+
+You can't use the root account for this config so the golflab_user was created to work around this. 
+
+To create a new database and give access to users:
+mysql -u root -p 
+(password is "root")
+create database <db name>;
+GRANT ALL PRIVILEGES ON <db name>.* TO '<user>'@'localhost';
+FLUSH PRIVILEGES;
+
+
+
 ## Built With
 
 * [React](https://reactjs.org/) - The web framework used
