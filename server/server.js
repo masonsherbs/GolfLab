@@ -22,6 +22,7 @@ app.use('/api/subscriptions', subscriptionRoutes);
 // app.use('/api/payments', paymentRoutes);
 
 // Database connection
+console.log("test");
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
 // Test the connection
