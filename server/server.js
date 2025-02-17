@@ -22,7 +22,6 @@ app.use('/api/subscriptions', subscriptionRoutes);
 // app.use('/api/payments', paymentRoutes);
 
 // Database connection
-console.log("test");
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
 // Test the connection
@@ -44,26 +43,26 @@ app.get('/api/users', async (req, res) => {
 });
 
 // New route to create a subscription
-app.post('/api/subscriptions', async (req, res) => {
-  try {
-    const { number } = req.body;
-    const subscription = await Subscription.create({ number });
-    res.json(subscription);
-  } catch (error) {
-    res.status(500).json({ error: 'Error creating subscription' });
-  }
-});
-// New route to get the most recent subscription
-app.get('/api/subscriptions/latest', async (req, res) => {
-  try {
-    const subscription = await Subscription.findOne({
-      order: [['createdAt', 'DESC']]
-    });
-    res.json(subscription);
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching latest subscription' });
-  }
-});
+// app.post('/api/subscriptions', async (req, res) => {
+//   try {
+//     const { number } = req.body;
+//     const subscription = await Subscription.create({ number });
+//     res.json(subscription);
+//   } catch (error) {
+//     res.status(500).json({ error: 'Error creating subscription' });
+//   }
+// });
+// // New route to get the most recent subscription
+// app.get('/api/subscriptions/latest', async (req, res) => {
+//   try {
+//     const subscription = await Subscription.findOne({
+//       order: [['createdAt', 'DESC']]
+//     });
+//     res.json(subscription);
+//   } catch (error) {
+//     res.status(500).json({ error: 'Error fetching latest subscription' });
+//   }
+// });
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
