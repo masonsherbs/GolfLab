@@ -4,11 +4,14 @@ const { Subscription } = require('./models');
 const { Sequelize } = require('sequelize');
 const config = require('./config/config.json')[process.env.NODE_ENV || 'development'];
 const db = require('./models');
+require('dotenv').config();
 
 const subscriptionRoutes = require('./routes/subscriptionRoutes');
-// const appointmentRoutes = require('./routes/appointmentRoutes');
-// const accessCodeRoutes = require('./routes/accessCodeRoutes');
-// const paymentRoutes = require('./routes/paymentRoutes');
+const authRoutes = require('./routes/authRoutes');
+const appointmentRoutes = require('./routes/appointmentRoutes');
+const accessCodeRoutes = require('./routes/accessCodeRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -17,9 +20,12 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/subscriptions', subscriptionRoutes);
-// app.use('/api/appointments', appointmentRoutes);
-// app.use('/api/access-codes', accessCodeRoutes);
-// app.use('/api/payments', paymentRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/appointments', appointmentRoutes);
+app.use('/api/access-codes', accessCodeRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/users', userRoutes);
+
 
 // Database connection
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
