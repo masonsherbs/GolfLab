@@ -1,24 +1,24 @@
 const { AccessCode } = require('../models');
 
-exports.createAccessCode = async (req, res) => {
+exports.createAccessCode = async (req, res, next) => {
   try {
     const accessCode = await AccessCode.create(req.body);
     res.status(201).json(accessCode);
   } catch (error) {
-    res.status(500).json({ error: 'Error creating access code' });
+    next(error);
   }
 };
 
-exports.getAllAccessCodes = async (req, res) => {
+exports.getAllAccessCodes = async (req, res, next) => {
   try {
     const accessCodes = await AccessCode.findAll();
     res.status(200).json(accessCodes);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.getAccessCodeById = async (req, res) => {
+exports.getAccessCodeById = async (req, res, next) => {
   try {
     const accessCode = await AccessCode.findByPk(req.params.id);
     if (accessCode) {
@@ -27,11 +27,11 @@ exports.getAccessCodeById = async (req, res) => {
       res.status(404).json({ message: 'Access code not found' });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.updateAccessCode = async (req, res) => {
+exports.updateAccessCode = async (req, res, next) => {
   try {
     const [updated] = await AccessCode.update(req.body, {
       where: { id: req.params.id }
@@ -43,11 +43,11 @@ exports.updateAccessCode = async (req, res) => {
       res.status(404).json({ message: 'Access code not found' });
     }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.deleteAccessCode = async (req, res) => {
+exports.deleteAccessCode = async (req, res, next) => {
   try {
     const deleted = await AccessCode.destroy({
       where: { id: req.params.id }
@@ -58,33 +58,33 @@ exports.deleteAccessCode = async (req, res) => {
       res.status(404).json({ message: 'Access code not found' });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.getAccessCodesByUserId = async (req, res) => {
+exports.getAccessCodesByUserId = async (req, res, next) => {
   try {
     const accessCodes = await AccessCode.findAll({
       where: { userId: req.params.userId }
     });
     res.status(200).json(accessCodes);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.getAccessCodesByAppointmentId = async (req, res) => {
+exports.getAccessCodesByAppointmentId = async (req, res, next) => {
   try {
     const accessCodes = await AccessCode.findAll({
       where: { appointmentId: req.params.appointmentId }
     });
     res.status(200).json(accessCodes);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.verifyAccessCode = async (req, res) => {
+exports.verifyAccessCode = async (req, res, next) => {
   try {
     const { code } = req.body;
     const accessCode = await AccessCode.findOne({
@@ -101,11 +101,11 @@ exports.verifyAccessCode = async (req, res) => {
       res.status(404).json({ message: 'Invalid or used access code' });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.generateAccessCode = async (req, res) => {
+exports.generateAccessCode = async (req, res, next) => {
   try {
     const { userId, appointmentId } = req.body;
     const code = Math.random().toString(36).substring(2, 12).toUpperCase();
@@ -120,6 +120,6 @@ exports.generateAccessCode = async (req, res) => {
 
     res.status(201).json(accessCode);
   } catch (error) {
-    res.status(500).json({ error: 'Error generating access code' });
+    next(error);
   }
 };

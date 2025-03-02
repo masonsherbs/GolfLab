@@ -1,24 +1,24 @@
 const { Payment } = require('../models');
 
-exports.createPayment = async (req, res) => {
+exports.createPayment = async (req, res, next) => {
   try {
     const payment = await Payment.create(req.body);
     res.status(201).json(payment);
   } catch (error) {
-    res.status(500).json({ error: 'Error creating payment' });
+    next(error);
   }
 };
 
-exports.getAllPayments = async (req, res) => {
+exports.getAllPayments = async (req, res, next) => {
   try {
     const payments = await Payment.findAll();
     res.status(200).json(payments);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.getPaymentById = async (req, res) => {
+exports.getPaymentById = async (req, res, next) => {
   try {
     const payment = await Payment.findByPk(req.params.id);
     if (payment) {
@@ -27,11 +27,11 @@ exports.getPaymentById = async (req, res) => {
       res.status(404).json({ message: 'Payment not found' });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.updatePayment = async (req, res) => {
+exports.updatePayment = async (req, res, next) => {
   try {
     const [updated] = await Payment.update(req.body, {
       where: { id: req.params.id }
@@ -43,11 +43,11 @@ exports.updatePayment = async (req, res) => {
       res.status(404).json({ message: 'Payment not found' });
     }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.deletePayment = async (req, res) => {
+exports.deletePayment = async (req, res, next) => {
   try {
     const deleted = await Payment.destroy({
       where: { id: req.params.id }
@@ -58,44 +58,44 @@ exports.deletePayment = async (req, res) => {
       res.status(404).json({ message: 'Payment not found' });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.getPaymentsByUserId = async (req, res) => {
+exports.getPaymentsByUserId = async (req, res, next) => {
   try {
     const payments = await Payment.findAll({
       where: { userId: req.params.userId }
     });
     res.status(200).json(payments);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.getPaymentsBySubscriptionId = async (req, res) => {
+exports.getPaymentsBySubscriptionId = async (req, res, next) => {
   try {
     const payments = await Payment.findAll({
       where: { subscriptionId: req.params.subscriptionId }
     });
     res.status(200).json(payments);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.getPaymentsByAppointmentId = async (req, res) => {
+exports.getPaymentsByAppointmentId = async (req, res, next) => {
   try {
     const payments = await Payment.findAll({
       where: { appointmentId: req.params.appointmentId }
     });
     res.status(200).json(payments);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.updatePaymentStatus = async (req, res) => {
+exports.updatePaymentStatus = async (req, res, next) => {
   try {
     const [updated] = await Payment.update(
       { status: req.body.status },
@@ -108,6 +108,6 @@ exports.updatePaymentStatus = async (req, res) => {
       res.status(404).json({ message: 'Payment not found' });
     }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error);
   }
 };

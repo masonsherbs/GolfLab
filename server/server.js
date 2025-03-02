@@ -5,6 +5,8 @@ const { Sequelize } = require('sequelize');
 const config = require('./config/config.json')[process.env.NODE_ENV || 'development'];
 const db = require('./models');
 require('dotenv').config();
+const errorHandler = require('./middleware/errorMiddleware');
+
 
 const subscriptionRoutes = require('./routes/subscriptionRoutes');
 const authRoutes = require('./routes/authRoutes');
@@ -69,6 +71,9 @@ app.get('/api/users', async (req, res) => {
 //     res.status(500).json({ error: 'Error fetching latest subscription' });
 //   }
 // });
+
+app.use(errorHandler);
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

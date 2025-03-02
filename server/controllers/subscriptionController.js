@@ -1,134 +1,124 @@
 const { Subscription } = require('../models');
 
-exports.createSubscription = async (req, res) => {
+exports.createSubscription = async (req, res, next) => {
   try {
     const subscription = await Subscription.create(req.body);
     res.status(201).json(subscription);
   } catch (error) {
-    res.status(500).json({ error: 'Error creating subscription' });
+    next(error);
   }
 };
 
-exports.getLatestSubscription = async (req, res) => {
+exports.getLatestSubscription = async (req, res, next) => {
   try {
     const subscription = await Subscription.findOne({
       order: [['createdAt', 'DESC']]
     });
     res.json(subscription);
   } catch (error) {
-    res.status(500).json({ error: 'Error fetching latest subscription' });
+    next(error);
   }
 };
 
-  // Get all subscriptions
-  exports.getAll = async (req, res) => {
-    try {
-      const subscriptions = await Subscription.findAll();
-      res.status(200).json(subscriptions);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
+exports.getAll = async (req, res, next) => {
+  try {
+    const subscriptions = await Subscription.findAll();
+    res.status(200).json(subscriptions);
+  } catch (error) {
+    next(error);
+  }
+};
 
-  // Get a single subscription by id
-    exports.getById = async (req, res) => {
-    try {
-      const subscription = await Subscription.findByPk(req.params.id);
-      if (subscription) {
-        res.status(200).json(subscription);
-      } else {
-        res.status(404).json({ message: 'Subscription not found' });
-      }
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+exports.getById = async (req, res, next) => {
+  try {
+    const subscription = await Subscription.findByPk(req.params.id);
+    if (subscription) {
+      res.status(200).json(subscription);
+    } else {
+      res.status(404).json({ message: 'Subscription not found' });
     }
-  };
+  } catch (error) {
+    next(error);
+  }
+};
 
-  // Update a subscription
-    exports.update = async (req, res) => {
-    try {
-      const [updated] = await Subscription.update(req.body, {
-        where: { id: req.params.id }
-      });
-      if (updated) {
-        const updatedSubscription = await Subscription.findByPk(req.params.id);
-        res.status(200).json(updatedSubscription);
-      } else {
-        res.status(404).json({ message: 'Subscription not found' });
-      }
-    } catch (error) {
-      res.status(400).json({ error: error.message });
+exports.update = async (req, res, next) => {
+  try {
+    const [updated] = await Subscription.update(req.body, {
+      where: { id: req.params.id }
+    });
+    if (updated) {
+      const updatedSubscription = await Subscription.findByPk(req.params.id);
+      res.status(200).json(updatedSubscription);
+    } else {
+      res.status(404).json({ message: 'Subscription not found' });
     }
-  };
+  } catch (error) {
+    next(error);
+  }
+};
 
-  // Delete a subscription
-    exports.delete = async (req, res) => {
-    try {
-      const deleted = await Subscription.destroy({
-        where: { id: req.params.id }
-      });
-      if (deleted) {
-        res.status(204).json({ message: 'Subscription deleted' });
-      } else {
-        res.status(404).json({ message: 'Subscription not found' });
-      }
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+exports.delete = async (req, res, next) => {
+  try {
+    const deleted = await Subscription.destroy({
+      where: { id: req.params.id }
+    });
+    if (deleted) {
+      res.status(204).json({ message: 'Subscription deleted' });
+    } else {
+      res.status(404).json({ message: 'Subscription not found' });
     }
-  };
+  } catch (error) {
+    next(error);
+  }
+};
 
-  // Get subscriptions by user id
-    exports.getByUserId = async (req, res) => {
-    try {
-      const subscriptions = await Subscription.findAll({
-        where: { userId: req.params.userId }
-      });
-      res.status(200).json(subscriptions);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+exports.getByUserId = async (req, res, next) => {
+  try {
+    const subscriptions = await Subscription.findAll({
+      where: { userId: req.params.userId }
+    });
+    res.status(200).json(subscriptions);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getByPlanType = async (req, res, next) => {
+  try {
+    const subscriptions = await Subscription.findAll({
+      where: { planType: req.params.planType }
+    });
+    res.status(200).json(subscriptions);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getActiveSubscriptions = async (req, res, next) => {
+  try {
+    const subscriptions = await Subscription.findAll({
+      where: { status: 'active' }
+    });
+    res.status(200).json(subscriptions);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updateStatus = async (req, res, next) => {
+  try {
+    const [updated] = await Subscription.update(
+      { status: req.body.status },
+      { where: { id: req.params.id } }
+    );
+    if (updated) {
+      const updatedSubscription = await Subscription.findByPk(req.params.id);
+      res.status(200).json(updatedSubscription);
+    } else {
+      res.status(404).json({ message: 'Subscription not found' });
     }
-  };
-
-  // Get subscriptions by plan type
-    exports.getByPlanType = async (req, res) => {
-    try {
-      const subscriptions = await Subscription.findAll({
-        where: { planType: req.params.planType }
-      });
-      res.status(200).json(subscriptions);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-
-  // Get active subscriptions
-    exports.getActiveSubscriptions = async (req, res) => {
-    try {
-      const subscriptions = await Subscription.findAll({
-        where: { status: 'active' }
-      });
-      res.status(200).json(subscriptions);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-
-  // Update subscription status
-    exports.updateStatus = async (req, res) => {
-    try {
-      const [updated] = await Subscription.update(
-        { status: req.body.status },
-        { where: { id: req.params.id } }
-      );
-      if (updated) {
-        const updatedSubscription = await Subscription.findByPk(req.params.id);
-        res.status(200).json(updatedSubscription);
-      } else {
-        res.status(404).json({ message: 'Subscription not found' });
-      }
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
-  };
-
-// module.exports = subscriptionController;
+  } catch (error) {
+    next(error);
+  }
+};

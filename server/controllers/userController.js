@@ -1,24 +1,24 @@
 const { User } = require('../models');
 
-exports.createUser = async (req, res) => {
+exports.createUser = async (req, res, next) => {
   try {
     const user = await User.create(req.body);
     res.status(201).json(user);
   } catch (error) {
-    res.status(500).json({ error: 'Error creating user' });
+    next(error);
   }
 };
 
-exports.getAllUsers = async (req, res) => {
+exports.getAllUsers = async (req, res, next) => {
   try {
     const users = await User.findAll();
     res.status(200).json(users);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.getUserById = async (req, res) => {
+exports.getUserById = async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id);
     if (user) {
@@ -27,11 +27,11 @@ exports.getUserById = async (req, res) => {
       res.status(404).json({ message: 'User not found' });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.updateUser = async (req, res) => {
+exports.updateUser = async (req, res, next) => {
   try {
     const [updated] = await User.update(req.body, {
       where: { id: req.params.id }
@@ -43,11 +43,11 @@ exports.updateUser = async (req, res) => {
       res.status(404).json({ message: 'User not found' });
     }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.deleteUser = async (req, res) => {
+exports.deleteUser = async (req, res, next) => {
   try {
     const deleted = await User.destroy({
       where: { id: req.params.id }
@@ -58,11 +58,11 @@ exports.deleteUser = async (req, res) => {
       res.status(404).json({ message: 'User not found' });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.getUserByUsername = async (req, res) => {
+exports.getUserByUsername = async (req, res, next) => {
   try {
     const user = await User.findOne({
       where: { username: req.params.username }
@@ -73,11 +73,11 @@ exports.getUserByUsername = async (req, res) => {
       res.status(404).json({ message: 'User not found' });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.getUserByEmail = async (req, res) => {
+exports.getUserByEmail = async (req, res, next) => {
   try {
     const user = await User.findOne({
       where: { email: req.params.email }
@@ -88,11 +88,11 @@ exports.getUserByEmail = async (req, res) => {
       res.status(404).json({ message: 'User not found' });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.updateAccessLevel = async (req, res) => {
+exports.updateAccessLevel = async (req, res, next) => {
   try {
     const [updated] = await User.update(
       { accessLevel: req.body.accessLevel },
@@ -105,6 +105,6 @@ exports.updateAccessLevel = async (req, res) => {
       res.status(404).json({ message: 'User not found' });
     }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error);
   }
 };

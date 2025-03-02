@@ -1,37 +1,35 @@
-const { Appointment } = require('../models');
+const { Appointment, Op } = require('../models');
 
-exports.createAppointment = async (req, res) => {
+exports.createAppointment = async (req, res, next) => {
   try {
     const appointment = await Appointment.create(req.body);
     res.status(201).json(appointment);
   } catch (error) {
-    res.status(500).json({ error: 'Error creating appointment' });
+    next(error);
   }
 };
 
-exports.getLatestAppointment = async (req, res) => {
+exports.getLatestAppointment = async (req, res, next) => {
   try {
     const appointment = await Appointment.findOne({
       order: [['dateTime', 'DESC']]
     });
     res.json(appointment);
   } catch (error) {
-    res.status(500).json({ error: 'Error fetching latest appointment' });
+    next(error);
   }
 };
 
-// Get all appointments
-exports.getAll = async (req, res) => {
+exports.getAll = async (req, res, next) => {
   try {
     const appointments = await Appointment.findAll();
     res.status(200).json(appointments);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-// Get a single appointment by id
-exports.getById = async (req, res) => {
+exports.getById = async (req, res, next) => {
   try {
     const appointment = await Appointment.findByPk(req.params.id);
     if (appointment) {
@@ -40,12 +38,11 @@ exports.getById = async (req, res) => {
       res.status(404).json({ message: 'Appointment not found' });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-// Update an appointment
-exports.update = async (req, res) => {
+exports.update = async (req, res, next) => {
   try {
     const [updated] = await Appointment.update(req.body, {
       where: { id: req.params.id }
@@ -57,12 +54,11 @@ exports.update = async (req, res) => {
       res.status(404).json({ message: 'Appointment not found' });
     }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error);
   }
 };
 
-// Delete an appointment
-exports.delete = async (req, res) => {
+exports.delete = async (req, res, next) => {
   try {
     const deleted = await Appointment.destroy({
       where: { id: req.params.id }
@@ -73,36 +69,33 @@ exports.delete = async (req, res) => {
       res.status(404).json({ message: 'Appointment not found' });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-// Get appointments by user id
-exports.getByUserId = async (req, res) => {
+exports.getByUserId = async (req, res, next) => {
   try {
     const appointments = await Appointment.findAll({
       where: { userId: req.params.userId }
     });
     res.status(200).json(appointments);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-// Get appointments by status
-exports.getByStatus = async (req, res) => {
+exports.getByStatus = async (req, res, next) => {
   try {
     const appointments = await Appointment.findAll({
       where: { status: req.params.status }
     });
     res.status(200).json(appointments);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-// Update appointment status
-exports.updateStatus = async (req, res) => {
+exports.updateStatus = async (req, res, next) => {
   try {
     const [updated] = await Appointment.update(
       { status: req.body.status },
@@ -115,12 +108,11 @@ exports.updateStatus = async (req, res) => {
       res.status(404).json({ message: 'Appointment not found' });
     }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error);
   }
 };
 
-// Get appointments for a specific date range
-exports.getByDateRange = async (req, res) => {
+exports.getByDateRange = async (req, res, next) => {
   try {
     const { startDate, endDate } = req.query;
     const appointments = await Appointment.findAll({
@@ -132,6 +124,6 @@ exports.getByDateRange = async (req, res) => {
     });
     res.status(200).json(appointments);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
