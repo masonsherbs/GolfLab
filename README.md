@@ -79,3 +79,36 @@ FLUSH PRIVILEGES;
 ## License
 
 This project is licensed under the ISC License - see the [LICENSE.md](LICENSE.md) file for details
+
+
+
+
+###### TODOS ######
+1. Authentication and Authorization:
+Implement user authentication (login, logout, register)
+Set up middleware for protecting routes that require authentication
+Implement role-based access control if needed (e.g., admin vs regular user)
+2. Error Handling and Validation:
+Implement consistent error handling across all controllers
+Add input validation for all routes (you can use libraries like Joi or express-validator)
+3. Environment Configuration:
+Ensure all sensitive information (database credentials, API keys) are stored in environment variables
+4. Testing:
+Write unit tests for your controllers and models
+Set up integration tests for your API endpoints
+5. API Documentation:
+Consider using a tool like Swagger to document your API endpoints
+6. Database Indexing:
+Review your database queries and add indexes where necessary for performance
+7. Logging:
+Implement logging for important actions and errors
+8. Rate Limiting:
+Implement rate limiting to prevent abuse of your API
+9. CORS Configuration:
+Ensure your CORS settings are properly configured for your frontend
+10. Data Relationships:
+Make sure all necessary relationships between your models (User, Appointment, Payment, Subscription, AccessCode) are properly set up in your Sequelize models
+11. Middleware:
+Implement any necessary custom middleware (e.g., for logging, error handling)
+12. Security:
+Implement security best practices (e.g., helmet for Express)
