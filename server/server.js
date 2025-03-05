@@ -1,23 +1,32 @@
-const express = require('express');
-const cors = require('cors');
-const { Subscription } = require('./models');
-const { Sequelize } = require('sequelize');
-const config = require('./config/config.json')[process.env.NODE_ENV || 'development'];
-const db = require('./models');
-require('dotenv').config();
-const errorHandler = require('./middleware/errorMiddleware');
+import express from 'express';
+import cors from 'cors';
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
+import subscriptionRoutes from './routes/subscriptionRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+import appointmentRoutes from './routes/appointmentRoutes.js';
+import accessCodeRoutes from './routes/accessCodeRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+import errorHandler from './middleware/errorMiddleware.js';
 
-const subscriptionRoutes = require('./routes/subscriptionRoutes');
-const authRoutes = require('./routes/authRoutes');
-const appointmentRoutes = require('./routes/appointmentRoutes');
-const accessCodeRoutes = require('./routes/accessCodeRoutes');
-const paymentRoutes = require('./routes/paymentRoutes');
-const userRoutes = require('./routes/userRoutes');
+import db from './models/index.js';
 
+dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const app = express();
 const port = process.env.PORT || 3001;
 
+// Import config dynamically
+const configModule = await import(join(__dirname, 'config', 'config.json'), {
+  assert: { type: 'json' }
+});
+const config = configModule.default[process.env.NODE_ENV || 'development'];
 app.use(cors());
 app.use(express.json());
 
@@ -28,14 +37,16 @@ app.use('/api/access-codes', accessCodeRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/users', userRoutes);
 
-
 // Database connection
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
 // Test the connection
-sequelize.authenticate()
-  .then(() => console.log('Connected to MySQL database'))
-  .catch(err => console.error('Unable to connect to the database:', err));
+try {
+  await sequelize.authenticate();
+  console.log('Connected to MySQL database');
+} catch (err) {
+  console.error('Unable to connect to the database:', err);
+}
 app.get('/api/hello', (req, res) => {
   res.json({ message: 'Hello from GolfLab server!' });
 });
@@ -49,28 +60,6 @@ app.get('/api/users', async (req, res) => {
     res.status(500).json({ error: 'Error fetching users' });
   }
 });
-
-// New route to create a subscription
-// app.post('/api/subscriptions', async (req, res) => {
-//   try {
-//     const { number } = req.body;
-//     const subscription = await Subscription.create({ number });
-//     res.json(subscription);
-//   } catch (error) {
-//     res.status(500).json({ error: 'Error creating subscription' });
-//   }
-// });
-// // New route to get the most recent subscription
-// app.get('/api/subscriptions/latest', async (req, res) => {
-//   try {
-//     const subscription = await Subscription.findOne({
-//       order: [['createdAt', 'DESC']]
-//     });
-//     res.json(subscription);
-//   } catch (error) {
-//     res.status(500).json({ error: 'Error fetching latest subscription' });
-//   }
-// });
 
 app.use(errorHandler);
 

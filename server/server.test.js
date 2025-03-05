@@ -1,10 +1,10 @@
-const request = require('supertest');
-const createServer = require('./server');
+import request from 'supertest';
+import createServer from './server.js';
 
 let app, sequelize;
 
-beforeAll(() => {
-  const server = createServer();
+beforeAll(async () => {
+  const server = await createServer();
   app = server.app;
   sequelize = server.sequelize;
 });
@@ -12,6 +12,7 @@ beforeAll(() => {
 afterAll(async () => {
   await sequelize.close();
 });
+
 describe('GET /api/hello', () => {
   it('should return a 200 OK status code', async () => {
     const response = await request(app).get('/api/hello');
