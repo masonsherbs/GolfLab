@@ -1,7 +1,6 @@
 'use strict';
 
-module.exports = {
-  async up(queryInterface, Sequelize) {
+const up = async (queryInterface, Sequelize) => {
     // Check if Users table exists, if not, create it
     const tablesExist = await queryInterface.showAllTables();
     if (!tablesExist.includes('Users')) {
@@ -110,9 +109,9 @@ module.exports = {
       allowNull: false,
       references: { model: 'Users', key: 'id' }
     });
-  },
+  };
 
-  async down(queryInterface, Sequelize) {
+  const down = async (queryInterface, Sequelize) => {
     const tableInfo = await queryInterface.describeTable('Subscriptions');
     const columnExists = (columnName) => Object.keys(tableInfo).includes(columnName);
 
@@ -133,5 +132,6 @@ module.exports = {
     if (tablesExist.includes('Users')) {
       await queryInterface.dropTable('Users');
     }
-  }
-};
+  };
+
+  export { up, down };

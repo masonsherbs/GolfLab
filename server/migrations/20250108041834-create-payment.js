@@ -1,8 +1,7 @@
 'use strict';
 
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Payments', {
+const up = async (queryInterface, Sequelize) => {
+  await queryInterface.createTable('Payments', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -56,8 +55,10 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
-  },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Payments');
-  }
 };
+
+const down = async (queryInterface, Sequelize) => {
+  await queryInterface.dropTable('Payments');
+};
+
+export { up, down };
