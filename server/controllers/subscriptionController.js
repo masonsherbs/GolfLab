@@ -1,4 +1,5 @@
-import { Subscription } from '../models/index.js';
+import db from '../models/index.js';
+const { Subscription } = db;
 
 export const createSubscription = async (req, res, next) => {
   try {

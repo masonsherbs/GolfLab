@@ -11,7 +11,7 @@ router.post('/', auth, appointmentController.createAppointment);
 router.get('/', auth, appointmentController.getAll);
 router.get('/:id', auth, appointmentController.getById);
 router.put('/:id', auth, appointmentController.update);
-router.delete('/:id', auth, appointmentController.delete);
+router.delete('/:id', auth, appointmentController.deleteAppointment);
 router.get('/user/:userId', auth, appointmentController.getByUserId);
 router.get('/status/:status', auth, appointmentController.getByStatus);
 router.patch('/:id/status', auth, appointmentController.updateStatus);

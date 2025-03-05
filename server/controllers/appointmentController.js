@@ -1,4 +1,5 @@
-import { Appointment, Op } from '../models/index.js';
+import db from '../models/index.js';
+const { Appointment, Op } = db;
 
 export const createAppointment = async (req, res, next) => {
   try {

@@ -1,4 +1,5 @@
-import { Payment } from '../models/index.js';
+import db from '../models/index.js';
+const { Payment } = db;
 
 export const createPayment = async (req, res, next) => {
   try {

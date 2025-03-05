@@ -1,4 +1,5 @@
-import { AccessCode } from '../models/index.js';
+import db from '../models/index.js';
+const { AccessCode } = db;
 
 export const createAccessCode = async (req, res, next) => {
   try {

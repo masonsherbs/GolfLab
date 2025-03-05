@@ -11,7 +11,7 @@ router.post('/', auth, subscriptionController.createSubscription);
 router.get('/', auth, subscriptionController.getAll);
 router.get('/:id', auth, subscriptionController.getById);
 router.put('/:id', auth, subscriptionController.update);
-router.delete('/:id', auth, subscriptionController.delete);
+router.delete('/:id', auth, subscriptionController.deleteSubscription);
 router.get('/user/:userId', auth, subscriptionController.getByUserId);
 router.get('/plan/:planType', auth, subscriptionController.getByPlanType);
 router.get('/active', auth, subscriptionController.getActiveSubscriptions);
