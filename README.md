@@ -72,6 +72,8 @@ FLUSH PRIVILEGES;
 
 * [React](https://reactjs.org/) - The web framework used
 
+* Note: we use ES Modules here and not CommonJS so use import commands instead of const require
+
 ## Authors
 
 * **Mason Sherburne** - *Initial work*
