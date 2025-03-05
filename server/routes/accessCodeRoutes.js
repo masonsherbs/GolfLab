@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
+import * as accessCodeController from '../controllers/accessCodeController.js';
+import auth from '../middleware/auth.js';
 const router = express.Router();
-const accessCodeController = require('../controllers/accessCodeController');
-const auth = require('../middleware/auth');
 
 // Public routes
 router.post('/verify', accessCodeController.verifyAccessCode);
@@ -15,4 +15,5 @@ router.delete('/:id', auth, accessCodeController.deleteAccessCode);
 router.get('/user/:userId', auth, accessCodeController.getAccessCodesByUserId);
 router.get('/appointment/:appointmentId', auth, accessCodeController.getAccessCodesByAppointmentId);
 router.post('/generate', auth, accessCodeController.generateAccessCode);
-module.exports = router;
+
+export default router;

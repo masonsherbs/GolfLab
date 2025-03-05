@@ -1,6 +1,6 @@
-const { Subscription } = require('../models');
+import { Subscription } from '../models/index.js';
 
-exports.createSubscription = async (req, res, next) => {
+export const createSubscription = async (req, res, next) => {
   try {
     const subscription = await Subscription.create(req.body);
     res.status(201).json(subscription);
@@ -9,7 +9,7 @@ exports.createSubscription = async (req, res, next) => {
   }
 };
 
-exports.getLatestSubscription = async (req, res, next) => {
+export const getLatestSubscription = async (req, res, next) => {
   try {
     const subscription = await Subscription.findOne({
       order: [['createdAt', 'DESC']]
@@ -20,7 +20,7 @@ exports.getLatestSubscription = async (req, res, next) => {
   }
 };
 
-exports.getAll = async (req, res, next) => {
+export const getAll = async (req, res, next) => {
   try {
     const subscriptions = await Subscription.findAll();
     res.status(200).json(subscriptions);
@@ -29,7 +29,7 @@ exports.getAll = async (req, res, next) => {
   }
 };
 
-exports.getById = async (req, res, next) => {
+export const getById = async (req, res, next) => {
   try {
     const subscription = await Subscription.findByPk(req.params.id);
     if (subscription) {
@@ -42,7 +42,7 @@ exports.getById = async (req, res, next) => {
   }
 };
 
-exports.update = async (req, res, next) => {
+export const update = async (req, res, next) => {
   try {
     const [updated] = await Subscription.update(req.body, {
       where: { id: req.params.id }
@@ -58,7 +58,7 @@ exports.update = async (req, res, next) => {
   }
 };
 
-exports.delete = async (req, res, next) => {
+export const deleteSubscription = async (req, res, next) => {
   try {
     const deleted = await Subscription.destroy({
       where: { id: req.params.id }
@@ -73,7 +73,7 @@ exports.delete = async (req, res, next) => {
   }
 };
 
-exports.getByUserId = async (req, res, next) => {
+export const getByUserId = async (req, res, next) => {
   try {
     const subscriptions = await Subscription.findAll({
       where: { userId: req.params.userId }
@@ -84,7 +84,7 @@ exports.getByUserId = async (req, res, next) => {
   }
 };
 
-exports.getByPlanType = async (req, res, next) => {
+export const getByPlanType = async (req, res, next) => {
   try {
     const subscriptions = await Subscription.findAll({
       where: { planType: req.params.planType }
@@ -95,7 +95,7 @@ exports.getByPlanType = async (req, res, next) => {
   }
 };
 
-exports.getActiveSubscriptions = async (req, res, next) => {
+export const getActiveSubscriptions = async (req, res, next) => {
   try {
     const subscriptions = await Subscription.findAll({
       where: { status: 'active' }
@@ -106,7 +106,7 @@ exports.getActiveSubscriptions = async (req, res, next) => {
   }
 };
 
-exports.updateStatus = async (req, res, next) => {
+export const updateStatus = async (req, res, next) => {
   try {
     const [updated] = await Subscription.update(
       { status: req.body.status },

@@ -2,8 +2,18 @@
 const {
   Model
 } = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  const Payment = sequelize.define('Payment', {
+import { Model } from 'sequelize';
+
+export default (sequelize, DataTypes) => {
+  class Payment extends Model {
+    static associate(models) {
+      Payment.belongsTo(models.User);
+      Payment.belongsTo(models.Subscription);
+      Payment.belongsTo(models.Appointment);
+    }
+  }
+
+  Payment.init({
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -42,13 +52,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM('pending', 'completed', 'failed'),
       defaultValue: 'pending'
     }
+  }, {
+    sequelize,
+    modelName: 'Payment',
   });
-
-  Payment.associate = function(models) {
-    Payment.belongsTo(models.User);
-    Payment.belongsTo(models.Subscription);
-    Payment.belongsTo(models.Appointment);
-  };
 
   return Payment;
 };

@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
+import * as appointmentController from '../controllers/appointmentController.js';
+import auth from '../middleware/auth.js';
 const router = express.Router();
-const appointmentController = require('../controllers/appointmentController');
-const auth = require('../middleware/auth');
 
 // Public route - might be needed for displaying available appointment slots
 router.get('/latest', appointmentController.getLatestAppointment);
@@ -16,4 +16,5 @@ router.get('/user/:userId', auth, appointmentController.getByUserId);
 router.get('/status/:status', auth, appointmentController.getByStatus);
 router.patch('/:id/status', auth, appointmentController.updateStatus);
 router.get('/date-range', auth, appointmentController.getByDateRange);
-module.exports = router;
+
+export default router;

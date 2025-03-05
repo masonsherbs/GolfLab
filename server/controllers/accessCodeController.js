@@ -1,6 +1,6 @@
-const { AccessCode } = require('../models');
+import { AccessCode } from '../models/index.js';
 
-exports.createAccessCode = async (req, res, next) => {
+export const createAccessCode = async (req, res, next) => {
   try {
     const accessCode = await AccessCode.create(req.body);
     res.status(201).json(accessCode);
@@ -9,7 +9,7 @@ exports.createAccessCode = async (req, res, next) => {
   }
 };
 
-exports.getAllAccessCodes = async (req, res, next) => {
+export const getAllAccessCodes = async (req, res, next) => {
   try {
     const accessCodes = await AccessCode.findAll();
     res.status(200).json(accessCodes);
@@ -18,7 +18,7 @@ exports.getAllAccessCodes = async (req, res, next) => {
   }
 };
 
-exports.getAccessCodeById = async (req, res, next) => {
+export const getAccessCodeById = async (req, res, next) => {
   try {
     const accessCode = await AccessCode.findByPk(req.params.id);
     if (accessCode) {
@@ -31,7 +31,7 @@ exports.getAccessCodeById = async (req, res, next) => {
   }
 };
 
-exports.updateAccessCode = async (req, res, next) => {
+export const updateAccessCode = async (req, res, next) => {
   try {
     const [updated] = await AccessCode.update(req.body, {
       where: { id: req.params.id }
@@ -47,7 +47,7 @@ exports.updateAccessCode = async (req, res, next) => {
   }
 };
 
-exports.deleteAccessCode = async (req, res, next) => {
+export const deleteAccessCode = async (req, res, next) => {
   try {
     const deleted = await AccessCode.destroy({
       where: { id: req.params.id }
@@ -62,7 +62,7 @@ exports.deleteAccessCode = async (req, res, next) => {
   }
 };
 
-exports.getAccessCodesByUserId = async (req, res, next) => {
+export const getAccessCodesByUserId = async (req, res, next) => {
   try {
     const accessCodes = await AccessCode.findAll({
       where: { userId: req.params.userId }
@@ -73,7 +73,7 @@ exports.getAccessCodesByUserId = async (req, res, next) => {
   }
 };
 
-exports.getAccessCodesByAppointmentId = async (req, res, next) => {
+export const getAccessCodesByAppointmentId = async (req, res, next) => {
   try {
     const accessCodes = await AccessCode.findAll({
       where: { appointmentId: req.params.appointmentId }
@@ -84,7 +84,7 @@ exports.getAccessCodesByAppointmentId = async (req, res, next) => {
   }
 };
 
-exports.verifyAccessCode = async (req, res, next) => {
+export const verifyAccessCode = async (req, res, next) => {
   try {
     const { code } = req.body;
     const accessCode = await AccessCode.findOne({
@@ -105,7 +105,7 @@ exports.verifyAccessCode = async (req, res, next) => {
   }
 };
 
-exports.generateAccessCode = async (req, res, next) => {
+export const generateAccessCode = async (req, res, next) => {
   try {
     const { userId, appointmentId } = req.body;
     const code = Math.random().toString(36).substring(2, 12).toUpperCase();

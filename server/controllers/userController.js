@@ -1,6 +1,6 @@
-const { User } = require('../models');
+import { User } from '../models/index.js';
 
-exports.createUser = async (req, res, next) => {
+export const createUser = async (req, res, next) => {
   try {
     const user = await User.create(req.body);
     res.status(201).json(user);
@@ -9,7 +9,7 @@ exports.createUser = async (req, res, next) => {
   }
 };
 
-exports.getAllUsers = async (req, res, next) => {
+export const getAllUsers = async (req, res, next) => {
   try {
     const users = await User.findAll();
     res.status(200).json(users);
@@ -18,7 +18,7 @@ exports.getAllUsers = async (req, res, next) => {
   }
 };
 
-exports.getUserById = async (req, res, next) => {
+export const getUserById = async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id);
     if (user) {
@@ -31,7 +31,7 @@ exports.getUserById = async (req, res, next) => {
   }
 };
 
-exports.updateUser = async (req, res, next) => {
+export const updateUser = async (req, res, next) => {
   try {
     const [updated] = await User.update(req.body, {
       where: { id: req.params.id }
@@ -47,7 +47,7 @@ exports.updateUser = async (req, res, next) => {
   }
 };
 
-exports.deleteUser = async (req, res, next) => {
+export const deleteUser = async (req, res, next) => {
   try {
     const deleted = await User.destroy({
       where: { id: req.params.id }
@@ -62,7 +62,7 @@ exports.deleteUser = async (req, res, next) => {
   }
 };
 
-exports.getUserByUsername = async (req, res, next) => {
+export const getUserByUsername = async (req, res, next) => {
   try {
     const user = await User.findOne({
       where: { username: req.params.username }
@@ -77,7 +77,7 @@ exports.getUserByUsername = async (req, res, next) => {
   }
 };
 
-exports.getUserByEmail = async (req, res, next) => {
+export const getUserByEmail = async (req, res, next) => {
   try {
     const user = await User.findOne({
       where: { email: req.params.email }
@@ -92,7 +92,7 @@ exports.getUserByEmail = async (req, res, next) => {
   }
 };
 
-exports.updateAccessLevel = async (req, res, next) => {
+export const updateAccessLevel = async (req, res, next) => {
   try {
     const [updated] = await User.update(
       { accessLevel: req.body.accessLevel },

@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
+import * as paymentController from '../controllers/paymentController.js';
+import auth from '../middleware/auth.js';
 const router = express.Router();
-const paymentController = require('../controllers/paymentController');
-const auth = require('../middleware/auth');
 
 // All payment routes should be protected
 router.post('/', auth, paymentController.createPayment);
@@ -14,4 +14,4 @@ router.get('/subscription/:subscriptionId', auth, paymentController.getPaymentsB
 router.get('/appointment/:appointmentId', auth, paymentController.getPaymentsByAppointmentId);
 router.patch('/:id/status', auth, paymentController.updatePaymentStatus);
 
-module.exports = router;
+export default router;

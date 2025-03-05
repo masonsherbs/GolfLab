@@ -1,9 +1,16 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
+import { Model } from 'sequelize';
+
+export default (sequelize, DataTypes) => {
+  class User extends Model {
+    static associate(models) {
+      User.hasMany(models.Subscription);
+      User.hasMany(models.Appointment);
+      User.hasMany(models.AccessCode);
+      User.hasMany(models.Payment);
+    }
+  }
+
+  User.init({
     username: {
       type: DataTypes.STRING(50),
       allowNull: false,
@@ -26,13 +33,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 0
     }
+  }, {
+    sequelize,
+    modelName: 'User',
   });
 
-  User.associate = function(models) {
-    User.hasMany(models.Subscription);
-    User.hasMany(models.Appointment);
-    User.hasMany(models.AccessCode);
-    User.hasMany(models.Payment);
-  };
   return User;
 };

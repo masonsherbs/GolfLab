@@ -2,8 +2,18 @@
 const {
   Model
 } = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  const Appointment = sequelize.define('Appointment', {
+import { Model } from 'sequelize';
+
+export default (sequelize, DataTypes) => {
+  class Appointment extends Model {
+    static associate(models) {
+      Appointment.belongsTo(models.User);
+      Appointment.hasOne(models.AccessCode);
+      Appointment.hasOne(models.Payment);
+    }
+  }
+
+  Appointment.init({
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -24,13 +34,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM('scheduled', 'completed', 'cancelled'),
       defaultValue: 'scheduled'
     }
+  }, {
+    sequelize,
+    modelName: 'Appointment',
   });
-
-  Appointment.associate = function(models) {
-    Appointment.belongsTo(models.User);
-    Appointment.hasOne(models.AccessCode);
-    Appointment.hasOne(models.Payment);
-  };
 
   return Appointment;
 };

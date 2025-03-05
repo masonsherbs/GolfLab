@@ -2,8 +2,17 @@
 const {
   Model
 } = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  const AccessCode = sequelize.define('AccessCode', {
+import { Model } from 'sequelize';
+
+export default (sequelize, DataTypes) => {
+  class AccessCode extends Model {
+    static associate(models) {
+      AccessCode.belongsTo(models.User);
+      AccessCode.belongsTo(models.Appointment);
+    }
+  }
+
+  AccessCode.init({
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -30,12 +39,10 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: false
     },
     expiresAt: DataTypes.DATE
+  }, {
+    sequelize,
+    modelName: 'AccessCode',
   });
-
-  AccessCode.associate = function(models) {
-    AccessCode.belongsTo(models.User);
-    AccessCode.belongsTo(models.Appointment);
-  };
 
   return AccessCode;
 };

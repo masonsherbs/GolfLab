@@ -85,9 +85,9 @@ This project is licensed under the ISC License - see the [LICENSE.md](LICENSE.md
 
 ###### TODOS ######
 1. Authentication and Authorization:
-Implement user authentication (login, logout, register)
+<!-- Implement user authentication (login, logout, register)
 Set up middleware for protecting routes that require authentication
-Implement role-based access control if needed (e.g., admin vs regular user)
+Implement role-based access control if needed (e.g., admin vs regular user) -->
 2. Error Handling and Validation:
 Implement consistent error handling across all controllers
 Add input validation for all routes (you can use libraries like Joi or express-validator)

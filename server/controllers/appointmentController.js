@@ -1,6 +1,6 @@
-const { Appointment, Op } = require('../models');
+import { Appointment, Op } from '../models/index.js';
 
-exports.createAppointment = async (req, res, next) => {
+export const createAppointment = async (req, res, next) => {
   try {
     const appointment = await Appointment.create(req.body);
     res.status(201).json(appointment);
@@ -9,7 +9,7 @@ exports.createAppointment = async (req, res, next) => {
   }
 };
 
-exports.getLatestAppointment = async (req, res, next) => {
+export const getLatestAppointment = async (req, res, next) => {
   try {
     const appointment = await Appointment.findOne({
       order: [['dateTime', 'DESC']]
@@ -20,7 +20,7 @@ exports.getLatestAppointment = async (req, res, next) => {
   }
 };
 
-exports.getAll = async (req, res, next) => {
+export const getAll = async (req, res, next) => {
   try {
     const appointments = await Appointment.findAll();
     res.status(200).json(appointments);
@@ -29,7 +29,7 @@ exports.getAll = async (req, res, next) => {
   }
 };
 
-exports.getById = async (req, res, next) => {
+export const getById = async (req, res, next) => {
   try {
     const appointment = await Appointment.findByPk(req.params.id);
     if (appointment) {
@@ -42,7 +42,7 @@ exports.getById = async (req, res, next) => {
   }
 };
 
-exports.update = async (req, res, next) => {
+export const update = async (req, res, next) => {
   try {
     const [updated] = await Appointment.update(req.body, {
       where: { id: req.params.id }
@@ -58,7 +58,7 @@ exports.update = async (req, res, next) => {
   }
 };
 
-exports.delete = async (req, res, next) => {
+export const deleteAppointment = async (req, res, next) => {
   try {
     const deleted = await Appointment.destroy({
       where: { id: req.params.id }
@@ -73,7 +73,7 @@ exports.delete = async (req, res, next) => {
   }
 };
 
-exports.getByUserId = async (req, res, next) => {
+export const getByUserId = async (req, res, next) => {
   try {
     const appointments = await Appointment.findAll({
       where: { userId: req.params.userId }
@@ -84,7 +84,7 @@ exports.getByUserId = async (req, res, next) => {
   }
 };
 
-exports.getByStatus = async (req, res, next) => {
+export const getByStatus = async (req, res, next) => {
   try {
     const appointments = await Appointment.findAll({
       where: { status: req.params.status }
@@ -95,7 +95,7 @@ exports.getByStatus = async (req, res, next) => {
   }
 };
 
-exports.updateStatus = async (req, res, next) => {
+export const updateStatus = async (req, res, next) => {
   try {
     const [updated] = await Appointment.update(
       { status: req.body.status },
@@ -112,7 +112,7 @@ exports.updateStatus = async (req, res, next) => {
   }
 };
 
-exports.getByDateRange = async (req, res, next) => {
+export const getByDateRange = async (req, res, next) => {
   try {
     const { startDate, endDate } = req.query;
     const appointments = await Appointment.findAll({

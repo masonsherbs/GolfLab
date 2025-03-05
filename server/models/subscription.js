@@ -1,7 +1,16 @@
 'use strict';
 const { Model } = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  const Subscription = sequelize.define('Subscription', {
+import { Model } from 'sequelize';
+
+export default (sequelize, DataTypes) => {
+  class Subscription extends Model {
+    static associate(models) {
+      Subscription.belongsTo(models.User);
+      Subscription.hasMany(models.Payment);
+    }
+  }
+
+  Subscription.init({
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -54,12 +63,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: true
     }
+  }, {
+    sequelize,
+    modelName: 'Subscription',
   });
-
-  Subscription.associate = function(models) {
-    Subscription.belongsTo(models.User);
-    Subscription.hasMany(models.Payment);
-  };
 
   return Subscription;
 };

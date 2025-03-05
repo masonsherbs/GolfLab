@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
+import * as subscriptionController from '../controllers/subscriptionController.js';
+import auth from '../middleware/auth.js';
 const router = express.Router();
-const subscriptionController = require('../controllers/subscriptionController');
-const auth = require('../middleware/auth');
 
 // Public route - might be needed for marketing or public pricing info
 router.get('/latest', subscriptionController.getLatestSubscription);
@@ -16,4 +16,5 @@ router.get('/user/:userId', auth, subscriptionController.getByUserId);
 router.get('/plan/:planType', auth, subscriptionController.getByPlanType);
 router.get('/active', auth, subscriptionController.getActiveSubscriptions);
 router.patch('/:id/status', auth, subscriptionController.updateStatus);
-module.exports = router;
+
+export default router;

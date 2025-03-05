@@ -1,6 +1,6 @@
-const { Payment } = require('../models');
+import { Payment } from '../models/index.js';
 
-exports.createPayment = async (req, res, next) => {
+export const createPayment = async (req, res, next) => {
   try {
     const payment = await Payment.create(req.body);
     res.status(201).json(payment);
@@ -9,7 +9,7 @@ exports.createPayment = async (req, res, next) => {
   }
 };
 
-exports.getAllPayments = async (req, res, next) => {
+export const getAllPayments = async (req, res, next) => {
   try {
     const payments = await Payment.findAll();
     res.status(200).json(payments);
@@ -18,7 +18,7 @@ exports.getAllPayments = async (req, res, next) => {
   }
 };
 
-exports.getPaymentById = async (req, res, next) => {
+export const getPaymentById = async (req, res, next) => {
   try {
     const payment = await Payment.findByPk(req.params.id);
     if (payment) {
@@ -31,7 +31,7 @@ exports.getPaymentById = async (req, res, next) => {
   }
 };
 
-exports.updatePayment = async (req, res, next) => {
+export const updatePayment = async (req, res, next) => {
   try {
     const [updated] = await Payment.update(req.body, {
       where: { id: req.params.id }
@@ -47,7 +47,7 @@ exports.updatePayment = async (req, res, next) => {
   }
 };
 
-exports.deletePayment = async (req, res, next) => {
+export const deletePayment = async (req, res, next) => {
   try {
     const deleted = await Payment.destroy({
       where: { id: req.params.id }
@@ -62,7 +62,7 @@ exports.deletePayment = async (req, res, next) => {
   }
 };
 
-exports.getPaymentsByUserId = async (req, res, next) => {
+export const getPaymentsByUserId = async (req, res, next) => {
   try {
     const payments = await Payment.findAll({
       where: { userId: req.params.userId }
@@ -73,7 +73,7 @@ exports.getPaymentsByUserId = async (req, res, next) => {
   }
 };
 
-exports.getPaymentsBySubscriptionId = async (req, res, next) => {
+export const getPaymentsBySubscriptionId = async (req, res, next) => {
   try {
     const payments = await Payment.findAll({
       where: { subscriptionId: req.params.subscriptionId }
@@ -84,7 +84,7 @@ exports.getPaymentsBySubscriptionId = async (req, res, next) => {
   }
 };
 
-exports.getPaymentsByAppointmentId = async (req, res, next) => {
+export const getPaymentsByAppointmentId = async (req, res, next) => {
   try {
     const payments = await Payment.findAll({
       where: { appointmentId: req.params.appointmentId }
@@ -95,7 +95,7 @@ exports.getPaymentsByAppointmentId = async (req, res, next) => {
   }
 };
 
-exports.updatePaymentStatus = async (req, res, next) => {
+export const updatePaymentStatus = async (req, res, next) => {
   try {
     const [updated] = await Payment.update(
       { status: req.body.status },
