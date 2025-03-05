@@ -1,4 +1,4 @@
-const { ValidationError } = require('sequelize');
+import { ValidationError } from 'sequelize';
 
 const errorHandler = (err, req, res, next) => {
   console.error(err.stack);
@@ -69,4 +69,4 @@ const errorHandler = (err, req, res, next) => {
   });
 };
 
-module.exports = errorHandler;
+export default errorHandler;
