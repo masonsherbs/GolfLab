@@ -51,4 +51,6 @@ const down = async (queryInterface, Sequelize) => {
   await queryInterface.dropTable('AccessCodes');
 };
 
-export { up, down };
+// export { up, down };
+
+module.exports = { up, down };

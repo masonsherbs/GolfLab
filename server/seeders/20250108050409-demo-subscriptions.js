@@ -30,21 +30,6 @@ const up = async (queryInterface, Sequelize) => {
       lastPaymentAmount: 10.00,
       createdAt: new Date(),
       updatedAt: new Date()
-    },
-    {
-      userId: 3,
-      planType: 'monthly',
-      currentSubscriptionPrice: 39.99,
-      startDate: new Date(new Date().setMonth(new Date().getMonth() - 1)),
-      endDate: new Date(new Date().setDate(new Date().getDate() - 1)),
-      status: 'cancelled',
-      stripeCustomerId: 'cus_246810121',
-      stripeSubscriptionId: 'sub_135791113',
-      nextPaymentDate: null,
-      lastPaymentDate: new Date(new Date().setMonth(new Date().getMonth() - 1)),
-      lastPaymentAmount: 39.99,
-      createdAt: new Date(new Date().setMonth(new Date().getMonth() - 1)),
-      updatedAt: new Date()
     }
   ], {});
 };
@@ -53,4 +38,6 @@ const down = async (queryInterface, Sequelize) => {
   await queryInterface.bulkDelete('Subscriptions', null, {});
 };
 
-export { up, down };
+// export { up, down };
+
+module.exports = { up, down };

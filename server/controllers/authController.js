@@ -17,18 +17,26 @@ export const register = async (req, res, next) => {
     next(error);
   }
 };
-
 export const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
-      return res.status(401).json({ message: 'Authentication failed' });
-    }
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Authentication failed' });
-    }
+      const { email, password } = req.body;
+      console.log('Login attempt for email:', email);
+
+      const user = await User.findOne({ where: { email } });
+      console.log('User found:', user ? 'Yes' : 'No');
+
+      if (!user) {
+          return res.status(401).json({ message: 'Authentication failed' });
+      }
+
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      console.log('Password:', password);
+      console.log('user.pwd:', user.password);
+      console.log('Password valid:', isPasswordValid);
+
+      if (!isPasswordValid) {
+          return res.status(401).json({ message: 'Authentication failed' });
+      }
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       process.env.JWT_SECRET,
@@ -36,6 +44,7 @@ export const login = async (req, res, next) => {
     );
     res.status(200).json({ token, userId: user.id });
   } catch (error) {
-    next(error);
+      console.error('Login error:', error);
+      res.status(500).json({ message: 'An error occurred during login', error: error.message });
   }
 };

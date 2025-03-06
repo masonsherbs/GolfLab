@@ -31,4 +31,6 @@ const down = async (queryInterface, Sequelize) => {
   await queryInterface.bulkDelete('Payments', null, {});
 };
 
-export { up, down };
+// export { up, down };
+
+module.exports = { up, down };

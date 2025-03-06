@@ -5,7 +5,7 @@ dotenv.config();
 export default {
   development: {
     username: process.env.DB_USERNAME || 'golflab_user',
-    password: process.env.DB_PASSWORD || password,
+    password: process.env.DB_PASSWORD || 'password',
     database: process.env.DB_NAME || 'golflab_dev',
     host: process.env.DB_HOST || '127.0.0.1',
     dialect: 'mysql',

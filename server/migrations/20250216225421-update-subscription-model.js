@@ -112,26 +112,39 @@ const up = async (queryInterface, Sequelize) => {
   };
 
   const down = async (queryInterface, Sequelize) => {
-    const tableInfo = await queryInterface.describeTable('Subscriptions');
-    const columnExists = (columnName) => Object.keys(tableInfo).includes(columnName);
+    try {
+      // Check if the Subscriptions table exists
+      const tables = await queryInterface.showAllTables();
+      if (tables.includes('Subscriptions')) {
+        const tableInfo = await queryInterface.describeTable('Subscriptions');
+        const columnExists = (columnName) => Object.keys(tableInfo).includes(columnName);
 
-    const columnsToRemove = [
-      'userId', 'planType', 'currentSubscriptionPrice', 'startDate', 'endDate',
-      'status', 'sessionsRemaining', 'stripeCustomerId', 'stripeSubscriptionId',
-      'nextPaymentDate', 'lastPaymentDate', 'lastPaymentAmount'
-    ];
+        const columnsToRemove = [
+          'userId', 'planType', 'currentSubscriptionPrice', 'startDate', 'endDate',
+          'status', 'sessionsRemaining', 'stripeCustomerId', 'stripeSubscriptionId',
+          'nextPaymentDate', 'lastPaymentDate', 'lastPaymentAmount'
+        ];
 
-    for (const columnName of columnsToRemove) {
-      if (columnExists(columnName)) {
-        await queryInterface.removeColumn('Subscriptions', columnName);
+        for (const columnName of columnsToRemove) {
+          if (columnExists(columnName)) {
+            await queryInterface.removeColumn('Subscriptions', columnName);
+          }
+        }
       }
-    }
 
-    // Check if Users table was created by this migration, if so, remove it
-    const tablesExist = await queryInterface.showAllTables();
-    if (tablesExist.includes('Users')) {
-      await queryInterface.dropTable('Users');
+      // Check if Users table exists, if so, remove it
+      if (tables.includes('Users')) {
+        await queryInterface.dropTable('Users');
+      }
+    } catch (error) {
+      console.error('Migration down error:', error);
+      // If the error is due to the table not existing, we can ignore it
+      if (error.name !== 'SequelizeDatabaseError') {
+        throw error;
+      }
     }
   };
 
-  export { up, down };
+  // export { up, down };
+
+  module.exports = { up, down };

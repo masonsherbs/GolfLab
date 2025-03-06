@@ -45,4 +45,6 @@ const down = async (queryInterface, Sequelize) => {
   await queryInterface.dropTable('Subscriptions');
 };
 
-export { up, down };
+// export { up, down };
+
+module.exports = { up, down };

@@ -66,6 +66,17 @@ create database <db name>;
 GRANT ALL PRIVILEGES ON <db name>.* TO '<user>'@'localhost';
 FLUSH PRIVILEGES;
 
+To drop all tables before undoing all migrations:
+SET FOREIGN_KEY_CHECKS = 0;
+
+DROP TABLE IF EXISTS Payments;
+DROP TABLE IF EXISTS Appointments;
+DROP TABLE IF EXISTS Subscriptions;
+DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS AccessCodes;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
 
 
 ## Built With

@@ -39,8 +39,9 @@ const up = async (queryInterface, Sequelize) => {
       }
     });
   };
+
 const down = async (queryInterface, Sequelize) => {
   await queryInterface.dropTable('Users');
 };
 
-export { up, down };
+module.exports = { up, down };

@@ -27,4 +27,6 @@ const down = async (queryInterface, Sequelize) => {
   await queryInterface.bulkDelete('AccessCodes', null, {});
 };
 
-export { up, down };
+// export { up, down };
+
+module.exports = { up, down };
