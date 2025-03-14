@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import prisma from '../prisma.js'
 
+// ... existing imports and code ...
 export const register = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
@@ -14,6 +15,16 @@ export const register = async (req, res, next) => {
       }
     });
     res.status(201).json({ message: 'User registered successfully', userId: user.id });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const logout = async (req, res, next) => {
+  try {
+    // In a real-world scenario, you might want to invalidate the token on the server side
+    // For now, we'll just send a success response
+    res.status(200).json({ message: 'Logout successful' });
   } catch (error) {
     next(error);
   }

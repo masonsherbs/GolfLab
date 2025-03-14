@@ -11,6 +11,11 @@ function App() {
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+  };
   return (
     <Router>
       <div className="App">
@@ -29,6 +34,7 @@ function App() {
               isLoggedIn ? (
                 <header className="App-header">
                   <h1>GolfLab</h1>
+                  <button onClick={handleLogout}>Logout</button>
                   <ApiTest />
                   <SubscriptionManager />
                   <h1>GolfLab Subscription System</h1>
