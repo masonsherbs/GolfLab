@@ -39,21 +39,35 @@ export const login = async (req, res, next) => {
     console.log('User found:', user ? 'Yes' : 'No');
 
     if (!user) {
-      return res.status(401).json({ message: 'Authentication failed' });
+      return res.status(401).json({ message: 'Authentication failed: User not found' });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     console.log('Password valid:', isPasswordValid);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Authentication failed' });
+      return res.status(401).json({ message: 'Authentication failed: Invalid password' });
     }
+
     const token = jwt.sign(
-      { userId: user.id, email: user.email },
+      { 
+        userId: user.id, 
+        email: user.email, 
+        accessLevel: user.accessLevel 
+      },
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
-    res.status(200).json({ token, userId: user.id });
+
+    // Log the generated token for debugging
+    console.log('Generated token:', token);
+
+    res.status(200).json({ 
+      message: 'Login successful',
+      token, 
+      userId: user.id,
+      accessLevel: user.accessLevel
+    });
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ message: 'An error occurred during login', error: error.message });

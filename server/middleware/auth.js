@@ -2,12 +2,30 @@ import jwt from 'jsonwebtoken';
 
 const authMiddleware = (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(' ')[1];
+    const authHeader = req.headers.authorization;
+    console.log('Auth headers:', authHeader);
+
+    if (!authHeader) {
+      return res.status(401).json({ message: 'Authentication failed: No token provided' });
+    }
+
+    const token = authHeader.split(' ')[1];
+    console.log('Extracted token:', token);
+
+    if (!token) {
+      return res.status(401).json({ message: 'Authentication failed: Invalid token format' });
+    }
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    req.userData = { userId: decodedToken.userId, email: decodedToken.email };
+    console.log('Decoded token:', decodedToken);
+    req.userData = { 
+      userId: decodedToken.userId, 
+      email: decodedToken.email,
+      accessLevel: decodedToken.accessLevel
+    };
     next();
   } catch (error) {
-    return res.status(401).json({ message: 'Authentication failed' });
+    console.error('Auth error:', error);
+    return res.status(401).json({ message: 'Authentication failed', error: error.message });
   }
 };
 

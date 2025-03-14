@@ -1,9 +1,10 @@
-import db from '../models/index.js';
-const { Subscription } = db;
+import prisma from '../prisma.js'
 
 export const createSubscription = async (req, res, next) => {
   try {
-    const subscription = await Subscription.create(req.body);
+    const subscription = await prisma.subscription.create({
+      data: req.body,
+    });
     res.status(201).json(subscription);
   } catch (error) {
     next(error);
@@ -12,8 +13,10 @@ export const createSubscription = async (req, res, next) => {
 
 export const getLatestSubscription = async (req, res, next) => {
   try {
-    const subscription = await Subscription.findOne({
-      order: [['createdAt', 'DESC']]
+    const subscription = await prisma.subscription.findFirst({
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
     res.json(subscription);
   } catch (error) {
@@ -23,7 +26,7 @@ export const getLatestSubscription = async (req, res, next) => {
 
 export const getAll = async (req, res, next) => {
   try {
-    const subscriptions = await Subscription.findAll();
+    const subscriptions = await prisma.subscription.findMany();
     res.status(200).json(subscriptions);
   } catch (error) {
     next(error);
@@ -32,7 +35,9 @@ export const getAll = async (req, res, next) => {
 
 export const getById = async (req, res, next) => {
   try {
-    const subscription = await Subscription.findByPk(req.params.id);
+    const subscription = await prisma.subscription.findUnique({
+      where: { id: parseInt(req.params.id) },
+    });
     if (subscription) {
       res.status(200).json(subscription);
     } else {
@@ -45,39 +50,39 @@ export const getById = async (req, res, next) => {
 
 export const update = async (req, res, next) => {
   try {
-    const [updated] = await Subscription.update(req.body, {
-      where: { id: req.params.id }
+    const updatedSubscription = await prisma.subscription.update({
+      where: { id: parseInt(req.params.id) },
+      data: req.body,
     });
-    if (updated) {
-      const updatedSubscription = await Subscription.findByPk(req.params.id);
-      res.status(200).json(updatedSubscription);
-    } else {
-      res.status(404).json({ message: 'Subscription not found' });
-    }
+    res.status(200).json(updatedSubscription);
   } catch (error) {
-    next(error);
+    if (error.code === 'P2025') {
+      res.status(404).json({ message: 'Subscription not found' });
+    } else {
+      next(error);
+    }
   }
 };
 
 export const deleteSubscription = async (req, res, next) => {
   try {
-    const deleted = await Subscription.destroy({
-      where: { id: req.params.id }
+    await prisma.subscription.delete({
+      where: { id: parseInt(req.params.id) },
     });
-    if (deleted) {
-      res.status(204).json({ message: 'Subscription deleted' });
-    } else {
-      res.status(404).json({ message: 'Subscription not found' });
-    }
+    res.status(204).json({ message: 'Subscription deleted' });
   } catch (error) {
-    next(error);
+    if (error.code === 'P2025') {
+      res.status(404).json({ message: 'Subscription not found' });
+    } else {
+      next(error);
+    }
   }
 };
 
 export const getByUserId = async (req, res, next) => {
   try {
-    const subscriptions = await Subscription.findAll({
-      where: { userId: req.params.userId }
+    const subscriptions = await prisma.subscription.findMany({
+      where: { userId: parseInt(req.params.userId) },
     });
     res.status(200).json(subscriptions);
   } catch (error) {
@@ -87,8 +92,8 @@ export const getByUserId = async (req, res, next) => {
 
 export const getByPlanType = async (req, res, next) => {
   try {
-    const subscriptions = await Subscription.findAll({
-      where: { planType: req.params.planType }
+    const subscriptions = await prisma.subscription.findMany({
+      where: { planType: req.params.planType },
     });
     res.status(200).json(subscriptions);
   } catch (error) {
@@ -98,8 +103,8 @@ export const getByPlanType = async (req, res, next) => {
 
 export const getActiveSubscriptions = async (req, res, next) => {
   try {
-    const subscriptions = await Subscription.findAll({
-      where: { status: 'active' }
+    const subscriptions = await prisma.subscription.findMany({
+      where: { status: 'active' },
     });
     res.status(200).json(subscriptions);
   } catch (error) {
@@ -109,17 +114,16 @@ export const getActiveSubscriptions = async (req, res, next) => {
 
 export const updateStatus = async (req, res, next) => {
   try {
-    const [updated] = await Subscription.update(
-      { status: req.body.status },
-      { where: { id: req.params.id } }
-    );
-    if (updated) {
-      const updatedSubscription = await Subscription.findByPk(req.params.id);
-      res.status(200).json(updatedSubscription);
-    } else {
-      res.status(404).json({ message: 'Subscription not found' });
-    }
+    const updatedSubscription = await prisma.subscription.update({
+      where: { id: parseInt(req.params.id) },
+      data: { status: req.body.status },
+    });
+    res.status(200).json(updatedSubscription);
   } catch (error) {
-    next(error);
+    if (error.code === 'P2025') {
+      res.status(404).json({ message: 'Subscription not found' });
+    } else {
+      next(error);
+    }
   }
 };

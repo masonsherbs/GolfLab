@@ -24,7 +24,12 @@ function SubscriptionManager() {
 
   const fetchSubscriptions = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/subscriptions');
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:3001/api/subscriptions', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       setSubscriptions(response.data);
     } catch (error) {
       setMessage('Error fetching subscriptions: ' + error.message);
@@ -34,7 +39,12 @@ function SubscriptionManager() {
   const handleCreateSubscription = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3001/api/subscriptions', newSubscription);
+      const token = localStorage.getItem('token');
+      await axios.post('http://localhost:3001/api/subscriptions', newSubscription, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       setMessage('Subscription created successfully');
       fetchSubscriptions();
       setNewSubscription({
@@ -54,8 +64,13 @@ function SubscriptionManager() {
   const handleUpdateStatus = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem('token');
       await axios.patch(`http://localhost:3001/api/subscriptions/${updateSubscription.id}/status`, {
-        status: updateSubscription.status,
+        status: updateSubscription.status
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
       setMessage('Subscription status updated successfully');
       fetchSubscriptions();
@@ -67,7 +82,12 @@ function SubscriptionManager() {
 
   const handleDeleteSubscription = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/api/subscriptions/${id}`);
+      const token = localStorage.getItem('token');
+      await axios.delete(`http://localhost:3001/api/subscriptions/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       setMessage('Subscription deleted successfully');
       fetchSubscriptions();
     } catch (error) {

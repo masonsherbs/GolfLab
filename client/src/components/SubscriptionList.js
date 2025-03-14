@@ -7,7 +7,12 @@ function SubscriptionList() {
 
   const fetchAllSubscriptions = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/subscriptions');
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:3001/api/subscriptions', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       setSubscriptions(response.data);
       setError('');
     } catch (err) {
