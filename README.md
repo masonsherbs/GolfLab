@@ -69,13 +69,20 @@ FLUSH PRIVILEGES;
 To drop all tables before undoing all migrations:
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP TABLE IF EXISTS Payments;
-DROP TABLE IF EXISTS Appointments;
-DROP TABLE IF EXISTS Subscriptions;
-DROP TABLE IF EXISTS Users;
-DROP TABLE IF EXISTS AccessCodes;
+DROP TABLE IF EXISTS Payment;
+DROP TABLE IF EXISTS Appointment;
+DROP TABLE IF EXISTS Subscription;
+DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS AccessCode;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+THEN
+
+npx prisma db push
+
+Then
+
 
 
 

@@ -1,0 +1,98 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum PlanType {
+  monthly
+  payPerUse
+  trial
+  punchCard
+}
+
+enum Status {
+  active
+  inactive
+  cancelled
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  password     String        // Add this line
+  firstName    String?
+  lastName     String?
+  phoneNumber  String?
+  accessLevel  Int           @default(0)
+  accessCodes  AccessCode[]
+  appointments Appointment[]
+  subscriptions Subscription[]
+  payments     Payment[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model AccessCode {
+  id            Int         @id @default(autoincrement())
+  userId        Int
+  user          User        @relation(fields: [userId], references: [id])
+  appointmentId Int         @unique  // Add @unique here
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+  code          String      @unique @db.VarChar(10)
+  isUsed        Boolean     @default(false)
+  expiresAt     DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+model Appointment {
+  id         Int         @id @default(autoincrement())
+  userId     Int
+  user       User        @relation(fields: [userId], references: [id])
+  dateTime   DateTime
+  duration   Int
+  status     String
+  accessCode AccessCode?
+  payments   Payment[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model Subscription {
+  id                       Int      @id @default(autoincrement())
+  userId                   Int
+  user                     User     @relation(fields: [userId], references: [id])
+  planType                 PlanType
+  currentSubscriptionPrice Float
+  startDate                DateTime
+  endDate                  DateTime?
+  status                   Status
+  sessionsRemaining        Int?
+  stripeCustomerId         String?
+  stripeSubscriptionId     String?
+  nextPaymentDate          DateTime?
+  lastPaymentDate          DateTime?
+  lastPaymentAmount        Float?
+  payments                 Payment[]
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+}
+
+model Payment {
+  id             Int          @id @default(autoincrement())
+  userId         Int
+  user           User         @relation(fields: [userId], references: [id])
+  subscriptionId Int?
+  subscription   Subscription? @relation(fields: [subscriptionId], references: [id])
+  appointmentId  Int?
+  appointment    Appointment? @relation(fields: [appointmentId], references: [id])
+  amount         Float
+  status         String
+  paymentDate    DateTime
+  paymentMethod  String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
