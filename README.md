@@ -111,6 +111,17 @@ Implement role-based access control if needed (e.g., admin vs regular user) -->
 2. Error Handling and Validation:
 Implement consistent error handling across all controllers
 Add input validation for all routes (you can use libraries like Joi or express-validator)
+
+---------------------- NOTE ----------------------
+[0] (node:5136) ExperimentalWarning: Import assertions are not a stable feature of the JavaScript language. Avoid relying on their current behavior and syntax as those might change in a future version of Node.js.
+[0] (Use `node --trace-warnings ...` to show where the warning was created)
+[0] (node:5136) ExperimentalWarning: Importing JSON modules is an experimental feature and might change at any time
+
+1. These warnings don't prevent your code from running, but they indicate that the syntax or behavior might change in future Node.js versions.
+2. For production environments, you might want to consider alternatives to avoid potential issues in the future:
+    a. For JSON imports: Instead of using dynamic imports with assertions, you could use fs.readFileSync and JSON.parse.
+    b. For other module imports: Ensure you're using stable import syntax.
+
 3. Environment Configuration:
 Ensure all sensitive information (database credentials, API keys) are stored in environment variables
 4. Testing:

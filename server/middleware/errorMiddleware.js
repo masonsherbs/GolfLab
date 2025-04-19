@@ -1,4 +1,5 @@
-import { ValidationError } from 'sequelize';
+import { ValidationError as SequelizeValidationError } from 'sequelize';
+import { NotFoundError, ValidationError, UnauthorizedError, ForbiddenError } from '../utils/customErrors.js';
 
 const errorHandler = (err, req, res, next) => {
   console.error(err.stack);
@@ -10,8 +11,19 @@ const errorHandler = (err, req, res, next) => {
     errors: err.errors || []
   };
 
-  // Handle Sequelize errors
+  // Handle custom errors
   if (err instanceof ValidationError) {
+    error.status = 400;
+    error.errors = err.errors;
+  } else if (err instanceof NotFoundError) {
+    error.status = 404;
+  } else if (err instanceof UnauthorizedError) {
+    error.status = 401;
+  } else if (err instanceof ForbiddenError) {
+    error.status = 403;
+  }
+  // Handle Sequelize errors
+  else if (err instanceof SequelizeValidationError) {
     error.message = 'Validation error';
     error.status = 400;
     error.errors = err.errors.map(e => ({
@@ -21,36 +33,29 @@ const errorHandler = (err, req, res, next) => {
   }
 
   // Handle specific error types
-  switch (err.name) {
-    case 'SequelizeUniqueConstraintError':
-      error.status = 409;
-      error.message = 'Resource already exists';
-      break;
-    case 'SequelizeForeignKeyConstraintError':
-      error.status = 400;
-      error.message = 'Invalid foreign key';
-      break;
-    case 'SequelizeDatabaseError':
-      error.status = 500;
-      error.message = 'Database error';
-      break;
-    case 'JsonWebTokenError':
-      error.status = 401;
-      error.message = 'Invalid token';
-      break;
-    case 'TokenExpiredError':
-      error.status = 401;
-      error.message = 'Token expired';
-      break;
-  }
-
-  // Handle custom error types
-  if (err.name === 'NotFoundError') {
-    error.status = 404;
-  } else if (err.name === 'UnauthorizedError') {
-    error.status = 401;
-  } else if (err.name === 'ForbiddenError') {
-    error.status = 403;
+  else {
+    switch (err.name) {
+      case 'SequelizeUniqueConstraintError':
+        error.status = 409;
+        error.message = 'Resource already exists';
+        break;
+      case 'SequelizeForeignKeyConstraintError':
+        error.status = 400;
+        error.message = 'Invalid foreign key';
+        break;
+      case 'SequelizeDatabaseError':
+        error.status = 500;
+        error.message = 'Database error';
+        break;
+      case 'JsonWebTokenError':
+        error.status = 401;
+        error.message = 'Invalid token';
+        break;
+      case 'TokenExpiredError':
+        error.status = 401;
+        error.message = 'Token expired';
+        break;
+    }
   }
 
   // If we're in development, include the stack trace
