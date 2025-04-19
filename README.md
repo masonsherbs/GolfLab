@@ -53,10 +53,6 @@ For the golflab_user account:
 mysql -u golflab_user -p
 (password is password)
 
-The ./server/config/config.json file contains the credentials to run the migration and seed commands like so:
-npx sequelize-cli db:migrate
-npx sequelize-cli db:seed:all
-
 You can't use the root account for this config so the golflab_user was created to work around this. 
 
 To create a new database and give access to users:
@@ -108,7 +104,7 @@ This project is licensed under the ISC License - see the [LICENSE.md](LICENSE.md
 <!-- Implement user authentication (login, logout, register)
 Set up middleware for protecting routes that require authentication
 Implement role-based access control if needed (e.g., admin vs regular user) -->
-2. Error Handling and Validation:
+2. Error Handling and Validation: -- COMPLETED 4/19/2025
 Implement consistent error handling across all controllers
 Add input validation for all routes (you can use libraries like Joi or express-validator)
 

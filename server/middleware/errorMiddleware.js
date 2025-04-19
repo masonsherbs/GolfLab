@@ -1,5 +1,5 @@
-import { ValidationError as SequelizeValidationError } from 'sequelize';
 import { NotFoundError, ValidationError, UnauthorizedError, ForbiddenError } from '../utils/customErrors.js';
+import { Prisma } from '@prisma/client';
 
 const errorHandler = (err, req, res, next) => {
   console.error(err.stack);
@@ -22,31 +22,32 @@ const errorHandler = (err, req, res, next) => {
   } else if (err instanceof ForbiddenError) {
     error.status = 403;
   }
-  // Handle Sequelize errors
-  else if (err instanceof SequelizeValidationError) {
-    error.message = 'Validation error';
-    error.status = 400;
-    error.errors = err.errors.map(e => ({
-      field: e.path,
-      message: e.message
-    }));
-  }
-
-  // Handle specific error types
-  else {
-    switch (err.name) {
-      case 'SequelizeUniqueConstraintError':
+  // Handle Prisma errors
+  else if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    switch (err.code) {
+      case 'P2002':
         error.status = 409;
-        error.message = 'Resource already exists';
+        error.message = 'Unique constraint violation';
         break;
-      case 'SequelizeForeignKeyConstraintError':
+      case 'P2003':
         error.status = 400;
-        error.message = 'Invalid foreign key';
+        error.message = 'Foreign key constraint violation';
         break;
-      case 'SequelizeDatabaseError':
+      case 'P2025':
+        error.status = 404;
+        error.message = 'Record not found';
+        break;
+      default:
         error.status = 500;
         error.message = 'Database error';
-        break;
+    }
+  } else if (err instanceof Prisma.PrismaClientValidationError) {
+    error.status = 400;
+    error.message = 'Validation error';
+  }
+  // Handle other specific error types
+  else {
+    switch (err.name) {
       case 'JsonWebTokenError':
         error.status = 401;
         error.message = 'Invalid token';
