@@ -104,7 +104,7 @@ This project is licensed under the ISC License - see the [LICENSE.md](LICENSE.md
 
 
 ###### TODOS ######
-1. Authentication and Authorization:
+1. Authentication and Authorization: -- COMPLETED 4/19/2025
 <!-- Implement user authentication (login, logout, register)
 Set up middleware for protecting routes that require authentication
 Implement role-based access control if needed (e.g., admin vs regular user) -->
