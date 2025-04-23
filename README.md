@@ -79,7 +79,7 @@ npx prisma db push
 
 Then
 
-
+npm run seed
 
 
 ## Built With
@@ -118,7 +118,7 @@ Add input validation for all routes (you can use libraries like Joi or express-v
     a. For JSON imports: Instead of using dynamic imports with assertions, you could use fs.readFileSync and JSON.parse.
     b. For other module imports: Ensure you're using stable import syntax.
 
-3. Environment Configuration:
+3. Environment Configuration: -- No change but eventually need to change
 Ensure all sensitive information (database credentials, API keys) are stored in environment variables
 4. Testing:
 Write unit tests for your controllers and models
@@ -133,7 +133,7 @@ Implement logging for important actions and errors
 Implement rate limiting to prevent abuse of your API
 9. CORS Configuration:
 Ensure your CORS settings are properly configured for your frontend
-10. Data Relationships:
+10. Data Relationships: ?? Prisma
 Make sure all necessary relationships between your models (User, Appointment, Payment, Subscription, AccessCode) are properly set up in your Sequelize models
 11. Middleware:
 Implement any necessary custom middleware (e.g., for logging, error handling)

@@ -2,10 +2,21 @@ import prisma from '../prisma.js';
 import { body, param, validationResult } from 'express-validator';
 import { NotFoundError, ValidationError } from '../utils/customErrors.js';
 
+let prismaInstance = prisma;
+
+// Add this function at the top of your file
+export const setPrisma = (newPrisma) => {
+  prismaInstance = newPrisma;
+};
 // Validation middleware
 export const validateSubscription = [
-  body('userId').isInt().withMessage('User ID must be an integer'),
-  body('planType').isIn(['basic', 'premium', 'pro']).withMessage('Invalid plan type'),
+  body('userId').custom((value) => {
+    if (Number.isInteger(value) || (typeof value === 'string' && /^\d+$/.test(value))) {
+      return true;
+    }
+    throw new Error('User ID must be an integer or a string that can be parsed as an integer');
+  }),
+  body('planType').isIn(['monthly','payPerUse','trial','punchCard']).withMessage('Invalid plan type'),
   body('status').isIn(['active', 'inactive', 'cancelled']).withMessage('Invalid status'),
   body('startDate').isISO8601().toDate().withMessage('Invalid start date'),
   body('endDate').isISO8601().toDate().withMessage('Invalid end date'),
@@ -20,7 +31,7 @@ export const validateUserId = [
 ];
 
 export const validatePlanType = [
-  param('planType').isIn(['basic', 'premium', 'pro']).withMessage('Invalid plan type'),
+  param('planType').isIn(['monthly','payPerUse','trial','punchCard']).withMessage('Invalid plan type'),
 ];
 
 export const validateStatus = [
@@ -35,7 +46,7 @@ export const createSubscription = [
       return next(new ValidationError(errors.array()));
     }
     try {
-      const subscription = await prisma.subscription.create({
+      const subscription = await prismaInstance.subscription.create({
         data: req.body,
       });
       res.status(201).json(subscription);
@@ -47,7 +58,7 @@ export const createSubscription = [
 
 export const getLatestSubscription = async (req, res, next) => {
   try {
-    const subscription = await prisma.subscription.findFirst({
+    const subscription = await prismaInstance.subscription.findFirst({
       orderBy: {
         createdAt: 'desc',
       },
@@ -63,7 +74,7 @@ export const getLatestSubscription = async (req, res, next) => {
 
 export const getAll = async (req, res, next) => {
   try {
-    const subscriptions = await prisma.subscription.findMany();
+    const subscriptions = await prismaInstance.subscription.findMany();
     res.status(200).json(subscriptions);
   } catch (error) {
     next(error);
@@ -78,7 +89,7 @@ export const getById = [
       return next(new ValidationError(errors.array()));
     }
     try {
-      const subscription = await prisma.subscription.findUnique({
+      const subscription = await prismaInstance.subscription.findUnique({
         where: { id: parseInt(req.params.id) },
       });
       if (!subscription) {
@@ -100,7 +111,7 @@ export const update = [
       return next(new ValidationError(errors.array()));
     }
     try {
-      const updatedSubscription = await prisma.subscription.update({
+      const updatedSubscription = await prismaInstance.subscription.update({
         where: { id: parseInt(req.params.id) },
         data: req.body,
       });
@@ -123,7 +134,7 @@ export const deleteSubscription = [
       return next(new ValidationError(errors.array()));
     }
     try {
-      await prisma.subscription.delete({
+      await prismaInstance.subscription.delete({
         where: { id: parseInt(req.params.id) },
       });
       res.status(204).send();
@@ -145,7 +156,7 @@ export const getByUserId = [
       return next(new ValidationError(errors.array()));
     }
     try {
-      const subscriptions = await prisma.subscription.findMany({
+      const subscriptions = await prismaInstance.subscription.findMany({
         where: { userId: parseInt(req.params.userId) },
       });
       res.status(200).json(subscriptions);
@@ -163,7 +174,7 @@ export const getByPlanType = [
       return next(new ValidationError(errors.array()));
     }
     try {
-      const subscriptions = await prisma.subscription.findMany({
+      const subscriptions = await prismaInstance.subscription.findMany({
         where: { planType: req.params.planType },
       });
       res.status(200).json(subscriptions);
@@ -175,7 +186,7 @@ export const getByPlanType = [
 
 export const getActiveSubscriptions = async (req, res, next) => {
   try {
-    const subscriptions = await prisma.subscription.findMany({
+    const subscriptions = await prismaInstance.subscription.findMany({
       where: { status: 'active' },
     });
     res.status(200).json(subscriptions);
@@ -193,7 +204,7 @@ export const updateStatus = [
       return next(new ValidationError(errors.array()));
     }
     try {
-      const updatedSubscription = await prisma.subscription.update({
+      const updatedSubscription = await prismaInstance.subscription.update({
         where: { id: parseInt(req.params.id) },
         data: { status: req.body.status },
       });

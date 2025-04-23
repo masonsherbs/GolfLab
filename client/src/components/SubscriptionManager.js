@@ -40,7 +40,13 @@ function SubscriptionManager() {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:3001/api/subscriptions', newSubscription, {
+      const subscriptionData = {
+        ...newSubscription,
+        userId: parseInt(newSubscription.userId, 10),
+        currentSubscriptionPrice: parseFloat(newSubscription.currentSubscriptionPrice),
+        sessionsRemaining: parseInt(newSubscription.sessionsRemaining, 10)
+      };
+      await axios.post('http://localhost:3001/api/subscriptions', subscriptionData, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -93,10 +99,36 @@ function SubscriptionManager() {
     } catch (error) {
       setMessage('Error deleting subscription: ' + error.message);
     }
+
+  };
+  const createTestUser = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const testUser = {
+        firstName: 'Test',
+        lastName: 'User',
+        username: 'User',
+        email: 'test@test.com',
+        password: '123456',    // Changed to meet 6 character minimum
+        accessLevel: 3         // Added accessLevel
+      };
+      const response = await axios.post('http://localhost:3001/api/users', testUser, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      setMessage(`Test user created successfully with ID: ${response.data.id}`);
+    } catch (error) {
+      setMessage('Error creating test user: ' + (error.response?.data?.message || error.message));
+    }
   };
   return (
     <div>
       <h2>Subscription Manager</h2>
+
+      <h3>Create New USer first before Subscription</h3>
+      <button onClick={createTestUser}>Create Test User</button>
+
 
       <h3>Create New Subscription</h3>
       <form onSubmit={handleCreateSubscription}>
