@@ -37,6 +37,13 @@ npm run dev
 
 The page will reload if you make edits. You will also see any lint errors in the console.
 
+### Swagger API
+To login to Swagger and test API endpoints, go to [http://localhost:3001/api-docs](http://localhost:3001/api-docs)
+
+Then, scroll down to /api/auth/login and enter a valid email and password.
+
+Copy the token and then go to the top of the page and click "Authoraize" and paste the token
+
 ### Testing
 1. Run the test cases:
 npm test
@@ -113,17 +120,17 @@ Add input validation for all routes (you can use libraries like Joi or express-v
 [0] (Use `node --trace-warnings ...` to show where the warning was created)
 [0] (node:5136) ExperimentalWarning: Importing JSON modules is an experimental feature and might change at any time
 
-1. These warnings don't prevent your code from running, but they indicate that the syntax or behavior might change in future Node.js versions.
-2. For production environments, you might want to consider alternatives to avoid potential issues in the future:
-    a. For JSON imports: Instead of using dynamic imports with assertions, you could use fs.readFileSync and JSON.parse.
-    b. For other module imports: Ensure you're using stable import syntax.
+        1. These warnings don't prevent your code from running, but they indicate that the syntax or behavior might change in future Node.js versions.
+        2. For production environments, you might want to consider alternatives to avoid potential issues in the future:
+            a. For JSON imports: Instead of using dynamic imports with assertions, you could use fs.readFileSync and JSON.parse.
+            b. For other module imports: Ensure you're using stable import syntax.
 
 3. Environment Configuration: -- No change but eventually need to change
 Ensure all sensitive information (database credentials, API keys) are stored in environment variables
 4. Testing:
 Write unit tests for your controllers and models
 Set up integration tests for your API endpoints
-5. API Documentation:
+5. API Documentation: COMPLETED 6/5/2025
 Consider using a tool like Swagger to document your API endpoints
 6. Database Indexing:
 Review your database queries and add indexes where necessary for performance

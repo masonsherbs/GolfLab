@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { PrismaClient } from '@prisma/client';
+import swaggerUi from 'swagger-ui-express';
+import { specs } from './config/swagger.js';
 
 import subscriptionRoutes from './routes/subscriptionRoutes.js';
 import authRoutes from './routes/authRoutes.js';
@@ -25,6 +27,9 @@ const port = process.env.PORT || 3001;
 const prisma = new PrismaClient();
 app.use(cors());
 app.use(express.json());
+
+// Serve Swagger documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/auth', authRoutes);
@@ -70,4 +75,4 @@ process.on('SIGINT', async () => {
   process.exit(0);
 });
 
-export { app };  
+export { app };
