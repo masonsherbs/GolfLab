@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node server/server.mjs",
     "server": "nodemon server/server.mjs",
-    "client": "npm start --prefix client",
+    "client": "npm run dev --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "build": "npm run build --prefix client",
     "install-client": "cd client && npm install",
