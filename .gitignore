@@ -77,3 +77,6 @@ dist
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
+
+# Ignore client build files
+client/build/
