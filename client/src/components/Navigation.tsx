@@ -54,9 +54,11 @@ const Navigation = () => {
                 {item.label}
               </Link>
             ))}
-            <Button className="bg-green-600 hover:bg-green-700">
-              Book Now
-            </Button>
+            <Link to="/login">
+              <Button className="bg-green-600 hover:bg-green-700">
+                Book Now
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Navigation */}
@@ -81,9 +83,11 @@ const Navigation = () => {
                     {item.label}
                   </Link>
                 ))}
-                <Button className="bg-green-600 hover:bg-green-700 mt-4">
-                  Book Now
-                </Button>
+                <Link to="/login" onClick={() => setIsOpen(false)}>
+                  <Button className="bg-green-600 hover:bg-green-700 mt-4 w-full">
+                    Book Now
+                  </Button>
+                </Link>
               </div>
             </SheetContent>
           </Sheet>
