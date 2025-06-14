@@ -4,6 +4,12 @@ Website to host GolfLab services
 #### Domain name ####
 golflabusa.com
 golflabusa.golf
+golflabidaho.com
+
+#### Dev server ####
+https://dev.golflabidaho.com/
+
+Login: msherburne
 
 ## Getting Started
 
