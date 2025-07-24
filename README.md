@@ -109,7 +109,12 @@ npm run seed
 
 This project is licensed under the ISC License - see the [LICENSE.md](LICENSE.md) file for details
 
-
+##### Dev server ####
+Process to reload changes:
+Login to test server with ssh root@64.227.58.7
+sudo nginx -t
+sudo systemctl reload nginx
+pm2 restart golflab
 
 
 ###### TODOS ######
